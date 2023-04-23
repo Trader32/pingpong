@@ -22,9 +22,9 @@ class Player1(GameSprite):
     def update(self):
         keys_pressed = key.get_pressed()
         if keys_pressed[K_w]:
-            self.rect.y -= 5
+            self.rect.y -= self.speed
         if keys_pressed[K_s]:
-            self.rect.y += 5
+            self.rect.y += self.speed
 
 
 class Player2(GameSprite):
@@ -35,17 +35,17 @@ class Player2(GameSprite):
     def update(self):
         keys_pressed = key.get_pressed()
         if keys_pressed[K_UP]:
-            self.rect.y -= 5
+            self.rect.y -= self.speed
         if keys_pressed[K_DOWN]:
-            self.rect.y += 5
+            self.rect.y += self.speed
 
 #создай окно игры
-window = display.set_mode((700 ,500))
+window = display.set_mode((1000 ,700))
 display.set_caption("пингпонг")
-background = transform.scale(image.load('background.png'), (1000 , 500))
-sprite1 = Player1('ufo.png', 1 , 75 ,5)
-sprite2 = Player2('ufo.png', 500 , 75, 5)
-ball = GameSprite('pngwing.com.png', 250 , 100, 3)
+background = transform.scale(image.load('background.png'), (1000 , 700))
+sprite1 = Player1('ufo.png', 1 , 75 ,10)
+sprite2 = Player2('ufo.png', 900 , 75, 10)
+ball = GameSprite('pngwing.com.png', 500 , 100, 3)
 FPS = 60
 
 x1 = 100
@@ -55,18 +55,22 @@ y2 = 300
 events = event.get()
 events[0].type
 
+font.init()
+font1 = font.Font(None, 100)
 
-ball.speed_x = randint(1,5)
-ball.speed_y = randint(0,5)
-
+ball.speed_x = 4
+ball.speed_y = 6
+finish = False
 game = True
 while game:
     for e in event.get():
         if e.type == QUIT:
             game = False
-    ball.rect.y += ball.speed_y
-    ball.rect.x += ball.speed_x
-    if ball.rect.y >= 500 or ball.rect.y <= 0:
+    if not finish:
+
+        ball.rect.y += ball.speed_y
+        ball.rect.x += ball.speed_x
+    if ball.rect.y >= 655 or ball.rect.y <= 0:
         ball.speed_y *= -1
     if sprite.collide_rect(sprite1 , ball) or sprite.collide_rect(sprite2 , ball):
         ball.speed_x *= -1
@@ -79,7 +83,27 @@ while game:
     ball.reset()
     ball.update()
 
+    display.update()
+    if ball.rect.x >= 1000:
+        Text1 = font1.render('1 игрок выйграл', True ,(255 ,10, 0))
+        finish = True
+        window.blit(Text1, (100, 200))
+        display.update()
+    if ball.rect.x <= 0:
+        Text2 = font1.render('2 игрок выйграл', True ,(200 ,100, 0))
+        finish = True
+        window.blit(Text2, (100, 200))
+        display.update()
+
+
+    # if finish = True
+    #     ball.rect.y = 300 
+    #     ball.rect.x = 300 
+
     clock = time.Clock()
     clock.tick(FPS)
     display.update()
+
+
+
     
