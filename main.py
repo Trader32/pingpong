@@ -1,5 +1,6 @@
 from pygame import *
 from random import randint
+from time import sleep 
 
 class GameSprite(sprite.Sprite):
     width = 50
@@ -96,9 +97,11 @@ while game:
         display.update()
 
 
-    # if finish = True
-    #     ball.rect.y = 300 
-    #     ball.rect.x = 300 
+    if finish == True:
+        sleep (2)
+        ball.rect.y = 300 
+        ball.rect.x = 300 
+        finish = False
 
     clock = time.Clock()
     clock.tick(FPS)
