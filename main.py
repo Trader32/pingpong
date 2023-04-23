@@ -34,7 +34,7 @@ class Player2(GameSprite):
        super().__init__(plair_imege, plair_x ,plair_y ,plair_speed)
     def update(self):
         keys_pressed = key.get_pressed()
-        if keys_pressed[K_LEFT]:
+        if keys_pressed[K_UP]:
             self.rect.y -= 5
         if keys_pressed[K_DOWN]:
             self.rect.y += 5
@@ -56,28 +56,30 @@ events = event.get()
 events[0].type
 
 
+ball.speed_x = randint(1,5)
+ball.speed_y = randint(0,5)
+
 game = True
 while game:
     for e in event.get():
         if e.type == QUIT:
             game = False
-            # if ball.speed.y = -500 or ball.speed.y = 0
-            #     speed.y * -1
-            # if sprite.collide_rect(sprite1 , ball)
-            #     sprite.collide_rect(sprite2 , ball)
-            #     s
-        window.blit(background, (0 ,0))
-
-        sprite1.reset()
-        sprite1.update()
-        sprite2.reset()
-        sprite2.update()
-        ball.reset()
-        ball.update()
-
-    clock = time.Clock()
-    clock.tick(FPS)
+    ball.rect.y += ball.speed_y
+    ball.rect.x += ball.speed_x
+    if ball.rect.y >= 500 or ball.rect.y <= 0:
+        ball.speed_y *= -1
+    if sprite.collide_rect(sprite1 , ball) or sprite.collide_rect(sprite2 , ball):
+        ball.speed_x *= -1
+            
+    window.blit(background, (0 ,0))
+    sprite1.reset()
+    sprite1.update()
+    sprite2.reset()
+    sprite2.update()
+    ball.reset()
+    ball.update()
 
     clock = time.Clock()
     clock.tick(FPS)
     display.update()
+    
